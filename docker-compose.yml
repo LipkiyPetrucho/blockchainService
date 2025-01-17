@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_fast_api
+    environment:
+      POSTGRES_USER: user_bc
+      POSTGRES_PASSWORD: pifpaf
+      POSTGRES_DB: bc
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user_bc:pifpaf@postgres:5432/bc
+
+volumes:
+  pgdata:
