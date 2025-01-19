@@ -2,12 +2,8 @@ import requests
 from fastapi import APIRouter, HTTPException
 
 from src.api.utils import load_transactions_from_dump
+from src.config import logger
 
-import logging
-
-# Настройка логирования
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/api",

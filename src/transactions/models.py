@@ -6,6 +6,7 @@ from src.database import Base, int_pk
 
 class Transaction(Base):
     id: Mapped[int_pk]
+    # block_id: Mapped[int] = mapped_column(Integer())
     hash: Mapped[str] = mapped_column(String())
     sender: Mapped[str] = mapped_column(String())
     receiver: Mapped[str] = mapped_column(String())

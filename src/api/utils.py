@@ -2,16 +2,12 @@ import aiohttp
 import pandas as pd
 import gzip
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.config import logger
 from src.transactions.models import Transaction
 from src.database import async_session_maker
 from io import BytesIO
 from bs4 import BeautifulSoup
-
-import logging
-
-# Настройка логирования
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 async def load_transactions_from_dump(dump_base_url: str):
