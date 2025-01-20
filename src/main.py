@@ -4,11 +4,11 @@ import uvicorn
 from fastapi import FastAPI
 
 from src.config import settings
-from src.transactions.infura_client import router as transactions_by_hash_infura_router
+from src.transactions.infura_client import router as info_by_infura
 from src.transactions.router import router as transactions_router
 from src.api.router import router as api_router
 
-from src.database import init_db, create_tables, delete_tables
+from src.database import init_db
 
 
 @asynccontextmanager
@@ -25,21 +25,13 @@ app = FastAPI(title="Blockchain Transaction Service", lifespan=lifespan)
 # Подключение роутов
 app.include_router(transactions_router, tags=["Transactions"])
 app.include_router(api_router, tags=["API"])
-app.include_router(transactions_by_hash_infura_router, tags=["TransactionsByHash"])
+app.include_router(info_by_infura, tags=["TransactionsByHash"])
 
 
 # Инициализация базы данных
 @app.on_event("startup")
 async def startup_event():
     await init_db()
-
-
-@app.get(
-    "/", summary="Корневая конечная точка",
-    description="Это корневая конечная точка, которая возвращает приветствие."
-)
-def read_root():
-    return {"Hello": "World"}
 
 
 if __name__ == "__main__":

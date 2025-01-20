@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 from fastapi import HTTPException
 
 from src.api.utils import logger
@@ -10,7 +10,7 @@ class INFURA:
         self.project_id = project_id
         self.url = f'https://{network}.infura.io/v3/{self.project_id}'
 
-    def api_call(self, method, params: list):
+    async def api_call(self, method, params: list):
         payload = {
             "jsonrpc": "2.0",
             "method": method,
@@ -18,14 +18,15 @@ class INFURA:
             "id": 1
         }
         headers = {"Content-Type": "application/json"}
-        response = requests.post(self.url, json=payload, headers=headers)
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.url, json=payload, headers=headers) as response:
+                logger.info("Загрузка данных с infura: %s", await response.json())
 
-        logger.info("Загрузка данных с infura: %s", response.json())
+                if response.status != 200:
+                    raise HTTPException(status_code=response.status, detail="Error connecting to Ethereum node")
 
-        if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Error connecting to Ethereum node")
-
-        return response.json().get("result")
+                return (await response.json()).get("result")
 
 
+# Инициализация клиента Infura с полученным ключом
 infura_client = INFURA(settings.infura_key)
