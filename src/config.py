@@ -10,6 +10,8 @@ from pydantic_settings import SettingsConfigDict
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+DOWNLOAD_LOG_FILE = "downloaded_files.txt"
+
 
 class Settings(BaseSettings):
     # DATABASE_URL: PostgresDsn TODO: проверить возможность замены 5-ти полей на одно.

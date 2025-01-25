@@ -1,7 +1,7 @@
 import requests
 from fastapi import APIRouter, HTTPException
 
-from src.api.utils import load_transactions_from_dump
+from src.api.utils2 import load_transactions_from_dump
 from src.config import logger
 
 
