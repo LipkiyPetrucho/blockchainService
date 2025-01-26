@@ -1,8 +1,7 @@
 import aiohttp
 from fastapi import HTTPException
 
-from src.api.utils import logger
-from src.config import settings
+from src.config import settings, logger
 
 
 class INFURA:

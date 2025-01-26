@@ -1,5 +1,8 @@
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
+from src.config import logger
 from src.transactions.models import Transaction
 from src.transactions.schemas import TransactionCreate, TransactionResponse
 
@@ -13,8 +16,13 @@ async def save_transaction(db: AsyncSession, data: TransactionCreate) -> Transac
 
 
 async def get_transactions(db: AsyncSession, skip: int, limit: int):
-    result = await db.execute(select(Transaction).offset(skip).limit(limit))
-    return result.scalars().all()
+    try:
+        logger.info(f"Fetching transactions with skip={skip}, limit={limit}")
+        result = await db.execute(select(Transaction).offset(skip).limit(limit))
+        return result.scalars().all()
+    except SQLAlchemyError as e:
+        logger.error(f"Database error: {e}")
+        return []
 
 
 async def get_transaction_by_hash(db: AsyncSession, transaction_hash: str):
