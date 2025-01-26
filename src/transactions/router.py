@@ -1,11 +1,11 @@
 from dotenv import load_dotenv
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config import settings
 from src.database import get_db_session
 from src.transactions.schemas import TransactionResponse
-from src.transactions.service import get_transactions
+from src.transactions.service import get_transactions, get_transaction_statistics, get_transaction_by_hash
 
 router = APIRouter(
     prefix="/transactions",
@@ -44,6 +44,29 @@ async def list_transactions(
     return transactions
 
 
-# @router.get("/{transaction_hash}", response_model=TransactionResponse)
-# async def get_transaction(transaction_hash: str, db: AsyncSession = Depends(get_db)):
-#     return await get_transaction_by_hash(db, transaction_hash)
+@router.get("/statistics", summary="Получить статистику по транзакциям")
+async def get_statistics(db: AsyncSession = Depends(get_db_session)):
+    """
+        Возвращает статистику по транзакциям, включая:
+        - Общее количество транзакций
+        - Среднюю стоимость газа
+        - Среднюю сумму транзакции
+        - Общую сумму всех транзакций
+        """
+    stats = await get_transaction_statistics(db)
+    return stats
+
+
+@router.get("/{transaction_hash}", response_model=TransactionResponse, summary="Получить транзакцию по хэшу")
+async def get_transaction(transaction_hash: str, db: AsyncSession = Depends(get_db_session)):
+    """
+        Получить информацию о транзакции по её хэшу.
+
+        :param transaction_hash: Хэш транзакции.
+        :param db: Сессия базы данных.
+        :return: Объект TransactionResponse.
+        """
+    transaction = await get_transaction_by_hash(db, transaction_hash)
+    if transaction is None:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+    return transaction
