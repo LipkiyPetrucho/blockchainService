@@ -1,8 +1,9 @@
+from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Annotated
 
 from sqlalchemy import func
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs, AsyncSession
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs, AsyncSession, AsyncEngine
 from sqlalchemy.orm import DeclarativeBase, declared_attr, mapped_column, Mapped
 
 from src.config import get_db_url
@@ -10,10 +11,11 @@ from src.config import get_db_url
 
 DATABASE_URL = get_db_url()
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine: AsyncEngine = create_async_engine(DATABASE_URL, echo=True)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 
+@asynccontextmanager
 async def get_db_session() -> AsyncSession:
     async with async_session_maker() as session:
         yield session
@@ -46,25 +48,3 @@ async def init_db():
             print("Database initialized successfully.")
     except Exception as e:
         print(f"Database initialization failed: {e}")
-
-
-async def create_tables():
-    try:
-        async with engine.begin() as conn:
-            print("Creating tables...")
-            # Add your table creation logic here
-            await conn.run_sync(Base.metadata.create_all)
-            print("Tables created successfully.")
-    except Exception as e:
-        print(f"Failed to create tables: {e}")
-
-
-async def delete_tables():
-    try:
-        async with engine.begin() as conn:
-            print("Deleting tables...")
-            # Add your table deletion logic here
-            await conn.run_sync(Base.metadata.drop_all)
-            print("Tables deleted successfully.")
-    except Exception as e:
-        print(f"Failed to delete tables: {e}")

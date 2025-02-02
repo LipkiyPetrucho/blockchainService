@@ -1,7 +1,7 @@
 import os
 import logging
 
-from pydantic import Field, AnyHttpUrl, PostgresDsn
+from pydantic import Field, AnyHttpUrl, PostgresDsn, AnyUrl
 from pydantic_settings import BaseSettings
 from pydantic_settings import SettingsConfigDict
 
@@ -20,11 +20,14 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
+    PGADMIN_EMAIL: str
+    PGADMIN_PASSWORD: str
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
     )
 
     infura_url: AnyHttpUrl = Field(..., description="Infura URL for Ethereum API")
+    infura_url_ws: AnyUrl = Field(..., description="Infura URL for WebSocket API")
     infura_key: str = Field(..., description="Infura project key")
     cache_expiry: int = Field(default=60, description="Cache expiry time in seconds")
 

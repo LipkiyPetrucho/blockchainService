@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.config import settings
 from src.database import get_db_session
 from src.transactions.schemas import TransactionResponse
 from src.transactions.service import get_transactions, get_transaction_statistics, get_transaction_by_hash
@@ -12,8 +11,6 @@ router = APIRouter(
 )
 
 load_dotenv()
-
-INFURA_URL = settings.infura_url
 
 
 @router.get("", response_model=list[TransactionResponse])

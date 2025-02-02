@@ -4,7 +4,7 @@ services:
     container_name: postgres_fast_api
     environment:
       POSTGRES_USER: user_bc
-      POSTGRES_PASSWORD: pifpaf
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: bc
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
@@ -21,6 +21,18 @@ services:
       - postgres
     environment:
       - DATABASE_URL=postgresql+asyncpg://user_bc:pifpaf@postgres:5432/bc
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: ai_pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      - PGADMIN_LISTEN_PORT=5060
+    ports:
+      - "5060:5060"
+    depends_on:
+      - postgres
 
 volumes:
   pgdata:

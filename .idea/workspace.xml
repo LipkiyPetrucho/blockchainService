@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4d1fcffc-283f-453c-8004-50c8ff3b243d" name="Changes" comment="step 1">
+      <change afterPath="$PROJECT_DIR$/src/transactions/subscribe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/load_transactions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/utils2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/utils2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/transactions/infura_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/transactions/infura_client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/transactions/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/transactions/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/transactions/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/transactions/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/transactions/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/transactions/service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,17 +46,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/django/weather",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/django/weather&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\django\blockchainService\src\api" />

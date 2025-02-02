@@ -1,7 +1,10 @@
 from dotenv import load_dotenv
 from fastapi import HTTPException, APIRouter
-from src.config import settings
+from src.config import settings, logger
+from src.database import get_db_session
 from src.transactions.infura import infura_client
+from src.transactions.schemas import TransactionBase, TransactionCreate
+from src.transactions.service import create_transaction
 
 load_dotenv()
 
@@ -14,13 +17,35 @@ router = APIRouter(
 
 @router.get("/transaction_config/{tx_hash}")
 async def get_transaction_by_hash_infura_config(tx_hash: str):
+    """Обработка хеша транзакции: получение данных и запись в БД"""
     if not tx_hash.startswith("0x"):
         tx_hash = "0x" + tx_hash
 
-    result = await infura_client.api_call("eth_getTransactionByHash", [tx_hash])
-    if not result:
-        raise HTTPException(status_code=404, detail="Transaction not found")
-    return result
+    # Запрашиваем информацию о транзакции через Infura API
+    try:
+        tx_data = await infura_client.api_call("eth_getTransactionByHash", [tx_hash])
+        if not tx_data:
+            logger.warning(f"Транзакция {tx_hash} не найдена.")
+            return
+        logger.info(f"Данные транзакции: {tx_data}")
+
+        # Преобразуем данные в экземпляр модели TransactionCreate.
+        tx_model = TransactionCreate(
+            hash=tx_data.get("hash"),
+            sender=tx_data.get("from"),
+            receiver=tx_data.get("to"),
+            value=int(tx_data.get("value", "0"), 16) if tx_data.get("value") else 0,
+            gas_price=int(tx_data.get("gasPrice", "0"), 16) if tx_data.get("gasPrice") else 0,
+            gas_used=int(tx_data.get("gas", "0"), 16) if tx_data.get("gas") else 0,
+        )
+
+        # Сохраняем транзакцию в базе данных
+        async with get_db_session() as db:
+            await create_transaction(db, tx_model)
+        return tx_data
+
+    except Exception as e:
+        logger.error(f"Ошибка при обработке транзакции {tx_hash}: {e}")
 
 
 @router.get("/block_number")

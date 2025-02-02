@@ -4,6 +4,7 @@ import os
 from io import BytesIO
 from urllib.parse import urljoin
 
+import aiofiles
 import aiohttp
 import pandas
 from bs4 import BeautifulSoup
@@ -15,11 +16,12 @@ from src.transactions.models import Transaction
 
 
 # Функция для загрузки уже загруженных файлов из локального хранилища
-def get_downloaded_files():
+async def get_downloaded_files():
     if not os.path.exists(DOWNLOAD_LOG_FILE):
         return set()
-    with open(DOWNLOAD_LOG_FILE, "r") as file:
-        return set(file.read().splitlines())
+    async with aiofiles.open(DOWNLOAD_LOG_FILE, "r") as file:
+        content = await file.read()
+        return set(content.splitlines())
 
 
 async def download_file_in_chunks(session, url, chunk_size=10 * 1024 * 1024):  # 10 MB

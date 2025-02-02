@@ -1,8 +1,8 @@
 from pydantic import BaseModel, Field
 
 
-class TransactionCreate(BaseModel):
-    hash: str = Field(..., description="Хеш транзакции, уникальный идентификатор, предоставляется клиентом")
+class TransactionBase(BaseModel):
+    hash: str = Field(..., description="Хеш транзакции")
     sender: str = Field(..., description="Адрес отправителя")
     receiver: str = Field(..., description="Адрес получателя")
     value: float = Field(..., description="Сумма транзакции")
@@ -10,6 +10,17 @@ class TransactionCreate(BaseModel):
     gas_used: int = Field(..., description="Использованное количество газа")
 
 
-class TransactionResponse(TransactionCreate):
-    # Наследуемся от TransactionCreate, так как структура ответа совпадает
+class TransactionCreate(TransactionBase):
     pass
+
+
+class TransactionResponse(TransactionCreate):
+    class Config:
+        from_attributes = True
+
+
+class TransactionStatistics(BaseModel):
+    total_transactions: int
+    avg_gas_price: float
+    avg_transaction_value: float
+    total_value: float
